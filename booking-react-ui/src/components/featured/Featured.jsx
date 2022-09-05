@@ -4,7 +4,7 @@ import './featured.css'
 
 const Featured = () => {
 
-  const {data, loading, error, Refetch} = useFetch('/hotels/countByCity?cities=berlin,madrid,london');
+  const {data, loading} = useFetch('/hotels/countByCity?cities=berlin,madrid,london');
 
   return (
     <div className='featured'>
