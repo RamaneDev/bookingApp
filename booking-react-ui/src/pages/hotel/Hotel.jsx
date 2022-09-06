@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import './hotel.css'
 import  Navbar from '../../components/navbar/Navbar'
 import  Header from '../../components/header/Header'
@@ -6,18 +6,22 @@ import  MailList from '../../components/mailList/MailList'
 import  Footer from '../../components/footer/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useFetch from '../../hooks/useFetch'
 import { SearchContext } from '../../context/SearchContext'
+import { AuthContext } from '../../context/AuthContext'
+import Reserve from '../../components/reserve/Reserve'
 
 const Hotel = () => {
 
   const location = useLocation();
-  const hotelId = location.pathname.split('/')[2];
-
-  const {data, loading, error, Refetch} = useFetch(`/hotels/find/${hotelId}`);
-
   const {dates, options} = useContext(SearchContext);
+  const {user} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+
+  const hotelId = location.pathname.split('/')[2];
+  const {data, loading} = useFetch(`/hotels/find/${hotelId}`);
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
@@ -28,6 +32,15 @@ const Hotel = () => {
 
   const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
+  const handleReserve = () => {
+    console.log(user);
+      if(user) {
+         setOpenModal(true);
+      }else{
+         navigate('/')
+      }
+  }
+
   return (
     <div>
       <Navbar />
@@ -37,7 +50,7 @@ const Hotel = () => {
       ):(
         <div className="hotelContainer">
           <div className="hotelWrapper">
-            <button className="bookNow">Reserve or Book Now!</button>
+            <button onClick={handleReserve} className="bookNow">Reserve or Book Now!</button>
             <h1 className="hotelTitle">{data.name}</h1>
             <div className="hotelAddress">
               <FontAwesomeIcon icon={faLocationDot} />
@@ -72,7 +85,7 @@ const Hotel = () => {
                 <h2>
                   <b>${days * data.cheapestPrice * options.room}</b> ({days} nights)
                 </h2>
-                <button>Reserve or Book Now!</button>
+                <button onClick={handleReserve}>Reserve or Book Now!</button>
               </div>
             </div>
           </div>
@@ -80,8 +93,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-
-
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={hotelId} />}
     </div>
   )
 }
