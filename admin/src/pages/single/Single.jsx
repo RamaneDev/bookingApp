@@ -2,6 +2,8 @@ import React from 'react'
 import './single.scss'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Navbar from '../../components/navbar/Navbar'
+import Chart from '../../components/chart/Chart'
+import TableT from '../../components/table/TableT'
 
 const Single = () => {
   return (
@@ -40,9 +42,14 @@ const Single = () => {
               </div>
             </div>
           </div>
-          <div className="div right"></div>
+          <div className="right">
+            <Chart className="chart" title={'User Spending (Last 6 Months )'} aspect={5 / 1}/>
+          </div>
         </div>
-        <div className="bottom"></div>
+        <div className="bottom">
+          <h1 className="title">Last Transactions</h1>
+          <TableT />
+        </div>
       </div>
     </div>
   )
