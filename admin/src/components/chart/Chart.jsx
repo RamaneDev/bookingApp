@@ -1,8 +1,8 @@
 import React from 'react'
 import './chart.scss'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const Chart = () => {
+const Chart = ({ aspect, title }) => {
   const data = [
     {
       name: 'January',
@@ -31,8 +31,8 @@ const Chart = () => {
   ];
   return (
     <div className='chart'>
-      <div className="title">Last 6 Months (Revenue)</div>
-      <ResponsiveContainer width="100%" height="100%">
+      <div className="title">{title}</div>
+      <ResponsiveContainer width="100%" aspect={aspect}>
         <LineChart
           width={500}
           height={300}
